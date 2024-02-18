@@ -55,9 +55,11 @@ export class TcpFetcher implements Fetcher {
           if(decodedText.includes('\r\n\r\n')) {
             const response = parseResponse(decodedText);
 
-            if(response.headers["content-length"] && response.bodyData) {
+            const contentLength = response.headers.get("content-length");
+
+            if(contentLength !== null && response.bodyData) {
               try {
-                if(response.bodyData.length >= parseInt(response.headers["content-length"])) {
+                if(response.bodyData.length >= parseInt(contentLength)) {
                   resolved = true;
 
                   resolve(new Response(response.bodyData, {

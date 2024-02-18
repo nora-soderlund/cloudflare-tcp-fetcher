@@ -19,7 +19,7 @@ export function parseResponse(data: any) {
 	const statusMessage = match[2];
 
 	// Headers
-	const headers: any = {};
+	const headers: Record<string, string> = {};
 	for (const line of headLines.slice(1)) {
 		// TODO: support alternate whitespace after first ":"?
 		const i = line.indexOf(': ');
@@ -47,5 +47,10 @@ export function parseResponse(data: any) {
 		throw new Error('Unable to determine Content-Length');
 	}
 
-	return { statusCode, statusMessage, headers, bodyData };
+	return {
+		statusCode,
+		statusMessage,
+		headers: new Headers(headers),
+		bodyData
+	};
 }
