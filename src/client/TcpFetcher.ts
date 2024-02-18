@@ -65,7 +65,7 @@ export class TcpFetcher implements Fetcher {
                   resolve(new Response(response.bodyData, {
                     status: response.statusCode,
                     statusText: response.statusMessage,
-                    headers: new Headers(response.headers)
+                    headers: response.headers
                   }));
                 }
               }
