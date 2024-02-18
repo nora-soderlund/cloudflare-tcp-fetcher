@@ -42,3 +42,22 @@ export default {
   }
 }
 ```
+
+## Examples
+
+### Using the response body
+```ts
+import { fetchUsingTcp } from "cloudflare-tcp-fetcher";
+
+export default {
+  async fetch(request: Request, env: never, ctx: ExecutionContext): Promise<Response> {
+    const response = await fetchUsingTcp("https://httpbin.org/delete", {
+      method: "DELETE"
+    });
+
+    return Response.json({
+      result: await response.json()
+    });
+  }
+}
+``` 
