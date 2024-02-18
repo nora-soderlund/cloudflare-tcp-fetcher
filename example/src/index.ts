@@ -1,9 +1,7 @@
-import { fetchUsingTcp } from "../../src/index";
+import { fetchUsingTcp } from "cloudflare-tcp-fetcher";
 
 export default {
 	async fetch(request: Request, env: never, ctx: ExecutionContext): Promise<Response> {
-		const response = await fetchUsingTcp("https://google.com");
-
-		return response;
+		return fetchUsingTcp("https://google.com");
 	},
 };
