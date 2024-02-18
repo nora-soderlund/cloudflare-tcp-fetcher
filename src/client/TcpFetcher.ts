@@ -30,7 +30,7 @@ export class TcpFetcher implements Fetcher {
           writer.write(value);
         }
 
-        write(`GET ${url.pathname}${url.search}${url.hash} HTTP/1.1\r\n`);
+        write(`${request.method} ${url.pathname}${url.search}${url.hash} HTTP/1.1\r\n`);
         write(`Host: ${url.host}\r\n`);
 
         request.headers.forEach((value, key) => {
