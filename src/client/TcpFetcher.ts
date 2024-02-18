@@ -18,6 +18,8 @@ export class TcpFetcher implements Fetcher {
     });
 
     return new Promise((resolve, reject) => {
+      let resolved = false;
+
       socket.opened.then(async () => {
         const writer = socket.writable.getWriter();
         const textEncoder = new TextEncoder();
@@ -56,6 +58,8 @@ export class TcpFetcher implements Fetcher {
             if(response.headers["content-length"] && response.bodyData) {
               try {
                 if(response.bodyData.length >= parseInt(response.headers["content-length"])) {
+                  resolved = true;
+
                   resolve(new Response(response.bodyData, {
                     status: response.statusCode,
                     statusText: response.statusMessage,
@@ -73,17 +77,25 @@ export class TcpFetcher implements Fetcher {
             reader.read().then(handleRead);
           }
           else {
+            resolved = true;
+
             reject("Reader was finished.");
           }
         }
 
         reader.read().then(handleRead);
-      }, reject);
+      }, (reason) => {
+        resolved = true;
+        
+        reject(reason);
+      });
 
       setTimeout(() => {
-        socket.close();
+        if(!resolved) {
+          socket.close();
 
-        reject("Connection timed out (>30s)");
+          reject("Connection timed out (>30s)");
+        }
       }, 30000);
     });
   }
