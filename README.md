@@ -16,7 +16,7 @@ You can re-use the TcpFetcher class until the worker is closed.
 import { TcpFetcher } from "cloudflare-tcp-fetcher";
 
 export default {
-	async fetch(request: Request, env: never, ctx: ExecutionContext): Promise<Response> {
+  async fetch(request: Request, env: never, ctx: ExecutionContext): Promise<Response> {
     const fetcher = new TcpFetcher();
 
     return fetcher.fetch(new Request("https://google.com", {
@@ -33,7 +33,7 @@ You can also input the TcpFetcher in the `init` object to reuse a connection.
 import { fetchUsingTcp } from "cloudflare-tcp-fetcher";
 
 export default {
-	async fetch(request: Request, env: never, ctx: ExecutionContext): Promise<Response> {
+  async fetch(request: Request, env: never, ctx: ExecutionContext): Promise<Response> {
     return fetchUsingTcp("https://google.com", {
       method: "GET"
     });
