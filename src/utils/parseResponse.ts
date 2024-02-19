@@ -19,7 +19,7 @@ export function parseResponse(data: any) {
 	const statusMessage = match[2];
 
 	// Headers
-	const headers: Record<string, string> = {};
+	const headers = new Headers();
 	for (const line of headLines.slice(1)) {
 		// TODO: support alternate whitespace after first ":"?
 		const i = line.indexOf(': ');
@@ -28,12 +28,13 @@ export function parseResponse(data: any) {
 		}
 		const key = line.slice(0, Math.max(0, i)).toLowerCase();
 		const val = line.slice(i + 2);
-		headers[key] = val;
+
+		headers.set(key, val);
 	}
 
 	let bodyData;
 
-	const contentLengthText = headers['content-length'];
+	const contentLengthText = headers.get('content-length');
 	if (contentLengthText) {
 		if (!/^[1-9]\d*$/.test(contentLengthText)) {
 			throw new Error('Content-Length does not match /^[1-9][0-9]*$/');
@@ -50,7 +51,7 @@ export function parseResponse(data: any) {
 	return {
 		statusCode,
 		statusMessage,
-		headers: new Headers(headers),
+		headers,
 		bodyData
 	};
 }
